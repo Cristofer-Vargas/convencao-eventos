@@ -1,5 +1,9 @@
 <?php
 
+use App\Http\Controllers\estudosLaravel\EstudosLaravel;
+use App\Http\Controllers\estudosLaravel\produto\ProdutoController;
+
+use App\Http\Controllers\EventoController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -13,6 +17,10 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::get('/', function () {
-    return view('welcome');
-});
+Route::get('/', [EventoController::class, 'index']);
+Route::get('eventos/criar/', [EventoController::class, 'create']);
+
+Route::get('/estudos-laravel', [EstudosLaravel::class, 'index']);
+
+Route::get('/estudos-laravel/produtos', [ProdutoController::class, 'index']);
+Route::get('/estudos-laravel/produto/{id?}', [ProdutoController::class, 'buscarProdutoPorId']);

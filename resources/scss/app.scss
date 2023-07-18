@@ -1,0 +1,35 @@
+// @import "/node_modules/bootstrap/scss/bootstrap";
+@import "bootstrap/scss/bootstrap";
+@import '/resources/scss/variables.scss';
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+article.estudos-content-main {
+  width: 100%;
+  min-height: 100vh;
+  display: flex;
+  justify-content: center;
+  background-color: #c6c6c6;
+
+  section {
+    max-width: 1280px;
+    padding: 0 40px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+    background-color: #fff;
+  }
+
+}
+
+header {
+  position: sticky;
+  top: 0;
+  
+  .navbar-nav {
+    gap: 15px;
+  }
+
+}
