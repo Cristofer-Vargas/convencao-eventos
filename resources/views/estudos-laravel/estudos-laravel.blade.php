@@ -233,9 +233,183 @@ Route::get('/estudos-laravel/produtos', [ProdutoController::class, 'index']);
         <li>E também para a criação de tabelas, as <code>migrations</code></li>
       </ul>
 
+
+      <h3>Migrations #1</h3>
+
+      <ul>
+        <li>As <code>migrations</code> funcionam como um versionamento de banco de dados</li>
+        <li>Podemos <code>avançar</code> e <code>retroceder</code> a qualquer momento</li>
+        <li>Adicionar colunas e remover de forma facilitada</li>
+        <li>Fazer o setup de DB de uma nova instalação em apenas um comando</li>
+        <li>Podemos verificas as migrations com <code>migrate:status</code></li>
+      </ul>
+
+      <h4>Na prática</h4>
+
       <p>
-        
+        Para criarmos mais tabelas no banco de dados usando o migration, rodamos o seguinte comando:
       </p>
+
+      <pre>
+php artisan make:migration name_table
+</pre>
+
+      <p>
+        Assim que criado teremos o seguinte arquivo padrão para as migrations:
+      </p>
+
+      <pre>
+use Illuminate\Database\Migrations\Migration;
+use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Support\Facades\Schema;
+
+return new class extends Migration
+&#123;
+    /**
+      * Run the migrations.
+      */
+    public function up(): void
+    &#123;
+        Schema::create('products', function (Blueprint $table) &#123;
+            $table->id();
+            $table->timestamps();
+        &#125;);
+    &#125;
+
+    /**
+      * Reverse the migrations.
+      */
+    public function down(): void
+    &#123;
+        Schema::dropIfExists('products');
+    &#125;
+&#125;;        
+</pre>
+
+      <p>
+        O método <code>up()</code> serve para a criação da tabela, e ali podemos inserir e atualizar
+        os dados e respectivos tipos para quando criar a tabela. Também temos o método
+        <code>down()</code>, que serve para dar <code>drop table</code>, ou, deletar a tabela para
+        que a mesma possa ser atualizada devidamente e entrar no <code>versionamento</code> da versão
+        daquela tabela no tempo / histórico de criação.
+      </p>
+
+      <p>
+        Quando criamos uma <code>migration</code> usando o comando mencionado, fará com que a tabela
+        fique pendende, e podemos ver os status de migration usando o comando:
+      </p>
+
+      <pre>
+php artisan migrate:status
+</pre>
+
+      <p>
+        Com isso poderemos ver as tabelas criadas no banco de dados, ou pendente para criação.
+        Com o comando a seguir, nós damos o " <code>up()</code> " para que a tabela seja criada.
+      </p>
+
+      <pre>
+php artisan migrate
+</pre>
+
+      <p>
+        E para atualizarmos as migrates, podemos rodar o seguinte comando:
+      </p>
+
+      <pre>
+php artisan migrate:fresh
+</pre>
+
+      <p>
+        Podemos também fazermos da seguinte forma para gerenciarmos os tipos e tamanho de cada
+        coluna no migration:
+      </p>
+
+      <pre>
+public function up(): void
+&#123;
+  Schema::create('products', function (Blueprint $table) &#123;
+    $table->id();
+    $table->string('nome', 100);
+    $table->integer('qtde');
+    $table->text('descricao');
+    $table->timestamps();
+  &#125;);
+&#125;
+</pre>
+
+      <h3>Migrations #2</h3>
+
+      <ul>
+        <li>Quando precisamos adicionar um novo campo a uma tabela, devemos
+          <code>criar uma nova migration</code>
+        </li>
+        <li>Devemos ter o <code>cuidado</code> para não rodarmos o comando <code>fresh</code>
+          , e apagar os dados já existentes</li>
+        <li>O comando <code>rollback</code> pode ser utilizado para voltar uma migration</li>
+        <li>Para voltar todas podemos utilizar o <code>reset</code></li>
+        <li>Para voltar todas e rodar o <code>migrate</code> novamente, utilizamos o
+          <code>refresh</code>
+        </li>
+      </ul>
+
+      <p>
+        Primeiramente, quando iremos adicionar um novo campo na tabela, não devemos alterar
+        o arquivo padrão, por exemplo: Temos a tabela <code>products</code> com o nome da migration
+        de <code>create_products_table</code>. A partir disto, quando criamos esta tabela e executamos
+        <code>php artisan migrate</code> fazemos com que o banco de dados seja criado está mesma tabela
+        , porém quando e si dermos migrate novamente neste arquivo, mesmo que atualizarmos um campo
+        ou outro, e fizermos a <code>migration</code>, <code>TODOS OS DADOS</code> desta tabela
+        serão apagados.
+      </p>
+
+      <p>
+        No momento que executamos a <code>migration</code> e criamos a tabela no banco de dados
+        , este arquivo php serviu a penas para a criação, e quando precisarmos adicionar um novo
+        campo por exemplo, devemos criar outro arquivo para fazermos <code>migration</code>, neste
+        caso por exemplo, se quisermos adicionar a coluna <code>categoria</code> a tabela
+        <code>products</code>, devemos criar outra <code>migration</code> seguindo a convenção do
+        Laravel desta forma:
+      </p>
+
+      <pre>
+php artisan make:migration add_categoria_to_products_table
+</pre>
+
+      <p>
+        Está é uma convenção do Laravel, e significa que, será adicionado (add) a categoria, para (to)
+        a tabela (table) products. No respectiv arquivo criado, virá com uma estrutura diferente de
+        esquema. Antes vinha com <code>Schema::create</code> pois criava a tabela, neste caso, o
+        Laravel subentende-se que será feito a adição de uma coluna, e usa o <code>Schema::table</code>
+        dando a liberdade que seja inserido os comandos necessários para adições no método <code>up()</code>
+        , sabendo que <code>up()</code> e <code>down()</code> possuem a mesma função que ao criarmos
+        uma tabela. Segue como o respectivo arquivo ficará:
+      </p>
+
+      <pre>
+return new class extends Migration
+&#123;
+  /**
+    * Run the migrations.
+    */
+  public function up(): void
+  &#123;
+    Schema::table('products', function (Blueprint $table) &#123;
+      $table->string('categoria', 100);
+    &#125;);
+  &#125;
+
+  /**
+    * Reverse the migrations.
+    */
+  public function down(): void
+  &#123;
+    Schema::table('products', function (Blueprint $table) &#123;
+      $table->dropColumn('categoria');
+    &#125;);
+  &#125;
+&#125;;
+</pre>
 
     </section>
   </article>
