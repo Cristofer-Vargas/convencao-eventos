@@ -58,6 +58,11 @@
                 Criar conta
               </a>
             </li>
+            <li class="nav-item">
+              <a class="nav-link" href="/estudos-laravel">
+                Documentação de estudos
+              </a>
+            </li>
           </ul>
         </div>
       </div>
@@ -72,7 +77,7 @@
 
   <footer>
   </footer>
-  
+
 </body>
 
 </html>

@@ -415,6 +415,106 @@ return new class extends Migration
 &#125;;
 </pre>
 
+      <h2>Eloquent</h2>
+
+      <ul>
+        <li>Eloquent é a <code>ORM</code> do Laravel</li>
+        <li>Cada tabela tem um <code>Model</code> que é responsável pela interação entre
+          as requisições ao banco</li>
+        <li>A convenção para o <code>Model</code> é o nome da entidade em singular.
+          Enquanto a tabela é a entidade no plural: Evento e Eventos</li>
+        <li>No <code>Model</code> faremos poucas alterações dos arquivos, geralmente
+          configurações específicas</li>
+      </ul>
+
+      <p>
+        Os Models no Laravel são classes PHP que estendem a classe <code>Illuminate\Database\Eloquent\Model</code>. 
+        Eles permitem que você execute operações de consulta no banco de dados, insira, atualize e exclua registros 
+        e também definam relações entre diferentes tabelas do banco de dados.
+      </p>
+
+      <p>
+        Cada <code>Model</code> representa uma tabela do banco de dados. Por padrão, o Laravel assume que o nome do
+        <code>Model</code> corresponde ao nome da tabela no <code>plural</code> (por exemplo, um Model chamado
+        <code>User</code> corresponderia a uma tabela chamada <code>users</code>). Caso o nome da tabela seja diferente,
+        você pode especificar o nome da tabela no Model através da <code>propriedade $table</code>.
+      </p>
+
+      <p>
+        As colunas da tabela do banco de dados podem ser acessadas como propriedades do Model. Por exemplo, se houver uma
+        coluna chamada name na tabela, você pode acessá-la como $model->name.
+      </p>
+
+      <p>
+        No exemplo a seguir, foi criado usando migrations, a tabela <code>eventos</code> (no plurar) e usando o comando a baixo,
+        o Model corresponde <code>Evento</code> (maiúsculo e no singular):
+      </p>
+
+      <pre>
+php artisan make:model Evento
+</pre>
+
+      <p>
+        Desta forma recemos o seguinte arquivo criado:
+      </p>
+
+      <h4>/App/Models/Evento.php</h4>
+
+      <pre>
+&lt;?php
+
+namespace App\Models;
+
+use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Model;
+
+class Evento extends Model
+&#123;
+  use HasFactory;
+&#125;
+</pre>
+
+      <p>
+        Com este Model, agora podemo usar o <code>EventoController</code> para passar os dados para o banco de dados
+        da seguinte forma:
+      </p>
+
+      <h4>/App/Http/Controllers/EventoController</h4>
+
+      <pre>
+use App\Models\Evento;
+
+class EventoController extends Controller
+&#123;
+  public function index() &#123;
+      
+    $eventos = Evento::all();
+
+    return view('welcome', ['eventos' => $eventos]);
+  &#125;
+&#125;
+</pre>
+
+      <p>
+        O Model <code>Evento</code>, agora extendido do Eloquent (ORM) do Laravel, possui o método <code>all()</code> que captura
+        todos os dados da tabela <code>Eventos</code> do banco e podendo no arquivo <code>welcome</code> mostra-los da seguinte 
+        sintaxe de diretivas do Blade:
+      </p>
+
+      <h4>~/welcome.blade.php<small>Exemplo:</small></h4>
+
+      <pre>
+&lt;ul>
+  &#64;foreach ($eventos as $evento)
+    &lt;li>
+      Título :: &#123;&#123; $evento->titulo &#125;&#125; &lt;br>
+      Descrição :: &#123;&#123; $evento->descricao &#125;&#125; &lt;br>
+      Cidade :: &#123;&#123; $evento->cidade &#125;&#125; &lt;br>
+    &lt;/li> &lt;br>
+  &#64;endforeach
+&lt;/ul>
+</pre>
+
     </section>
   </article>
 
