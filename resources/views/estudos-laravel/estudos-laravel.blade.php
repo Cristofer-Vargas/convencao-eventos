@@ -1,6 +1,10 @@
 @extends('layouts.main')
 
 @section('title', 'Estudos Laravel')
+@section('styles')
+  @vite(['resources/scss/estudos-laravel.scss'])
+@endsection
+
 @section('content-main')
 
   <article class="estudos-content-main markdown-body">
