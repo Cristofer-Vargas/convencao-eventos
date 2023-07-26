@@ -1,2 +1,39 @@
 @import url('https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;0,900;1,100;1,300;1,400;1,500;1,700;1,900&display=swap');
 
+//..importa funções, variáveis e mixins do bootstrap
+@import "bootstrap/scss/functions";
+@import "bootstrap/scss/variables";
+@import "bootstrap/scss/mixins";
+
+// Variáveis
+$primary: #cd853f;
+$secondary: #00ABBD;
+$tertiary: #72F2EB;
+
+$link-color: #45C4B0;
+$link-hover-color: #fff;
+
+//..atualiza a paleta de cores
+$theme-colors: (
+  "primary":    $primary,
+  "secondary":  $secondary,
+  "success":    $success,
+  "info":       $info,
+  "warning":    $warning,
+  "danger":     $danger,
+  "light":      $light,
+  "dark":       $dark,
+  "link-color": $link-color,
+  "link-hover-color": $link-hover-color,
+);
+
+//..adicionando uma nova paleta de cores
+$custom-colors:(
+  "tertiary": $tertiary
+);
+
+//..mesclando a nova paleta com a paleta padrão
+$theme-colors: map-merge($theme-colors , $custom-colors );
+
+//..importa o arquivo do Bootstrap
+@import "bootstrap/scss/bootstrap";

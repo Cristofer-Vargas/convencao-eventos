@@ -1,0 +1,70 @@
+@use './variables.scss' as *;
+
+.banner-eventos {
+  height: 400px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  background-image: url("https://picsum.photos/id/0/5000/3333.jpg");
+  background-repeat: no-repeat;
+  background-size: cover;
+  background-position: center center;
+  
+  h1 {
+    color: #fff;
+    backdrop-filter: blur(4px);
+    padding: 40px 80px;
+    text-transform: uppercase;
+    font-weight: bolder;
+  }
+
+}
+
+.container-eventos {
+  padding: 50px 0;
+
+  > p.next-events {
+    color: #777;
+
+    border-bottom: solid $primary 2px;
+    padding: 8px 0;
+    margin: 10px 0 40px 0;
+  }
+
+  .card-eventos {
+    width: 100%;
+    margin: 0;
+    flex-wrap: wrap;
+    gap: 20px;
+    justify-content: space-between;
+  
+    .card {
+      padding: 0;
+      img {
+        margin: auto;
+      }
+
+      .card-body {
+        position: relative;
+        
+        time.card-date {
+          color: #777;
+          font-weight: lighter;
+          margin-bottom: 16px;
+        }
+
+        h5.card-title {
+          font-weight: bolder;
+          margin-bottom: 18px;
+        }
+
+        p.card-participants {
+          font-weight: lighter;
+          color: $primary;
+        }
+      }
+    }
+  }
+
+}
