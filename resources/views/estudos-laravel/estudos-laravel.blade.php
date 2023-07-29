@@ -5,6 +5,10 @@
   @vite(['resources/scss/estudos-laravel.scss'])
 @endsection
 
+@section('script')
+  @vite(['resources/js/estudos-laravel/estudos-laravel.js'])
+@endsection
+
 @section('content-main')
 
   <section class="main-fullsize">
@@ -16,6 +20,9 @@
   <section class="main-content">
     <article class="markdown-body">
       <section>
+
+        <section id="sumario-document">
+        </section>
 
         <p>Ducumentação dos estudos...</p>
         <a href="/">Página Inicial</a>
@@ -31,7 +38,7 @@
           </li>
         </ul>
 
-        <h3>Parâmtros obrigatórios</h3>
+        <h3>Parâmetros obrigatórios</h3>
 
         <p>
           Em nossa aplicação podemos possuir rotas, onde os parâmetros deverão ser consedidos obrigatoriamente.
@@ -524,6 +531,18 @@ class EventoController extends Controller
   &#64;endforeach
 &lt;/ul>
 </pre>
+
+        <h2>Adicionando registro ao banco</h2>
+
+        <ul>
+          <li>No Laravel é comum ter uma <code>action</code> específica para o <code>POST</code>
+            , chamada de <code>store</code></li>
+          <li>Lá vamos criar o objeto e compor ele com basse nos dados enviados pelo
+            <code>POST</code>
+          </li>
+          <li>Com o objeto formado utilizamos o método <code>save</code> para persistir os
+            dados</li>
+        </ul>
 
       </section>
     </article>

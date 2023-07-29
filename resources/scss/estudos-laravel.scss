@@ -1,22 +1,60 @@
-@import url('https://cdnjs.cloudflare.com/ajax/libs/github-markdown-css/5.2.0/github-markdown-light.min.css');
+@import url("https://cdnjs.cloudflare.com/ajax/libs/github-markdown-css/5.2.0/github-markdown-light.min.css");
 
 .banner {
-  height: 400px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
+	height: 400px;
+	display: flex;
+	align-items: center;
+	justify-content: center;
 
-  background-image: url("https://images.unsplash.com/photo-1521185496955-15097b20c5fe?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1350&q=80");
-  background-repeat: no-repeat;
-  background-size: cover;
-  background-position: center center;
-  
-  h1 {
-    color: #fff;
-    backdrop-filter: blur(4px);
-    padding: 40px 80px;
-    text-transform: uppercase;
-    font-weight: bolder;
-  }
+	background-image: url("https://images.unsplash.com/photo-1521185496955-15097b20c5fe?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1350&q=80");
+	background-repeat: no-repeat;
+	background-size: cover;
+	background-position: center center;
+
+	h1 {
+		color: #fff;
+		backdrop-filter: blur(4px);
+		padding: 40px 80px;
+		text-transform: uppercase;
+		font-weight: bolder;
+	}
 }
 
+#sumario-document {
+
+	border-bottom: 1px solid #222;
+	margin-bottom: 10px;
+
+	div.sumary-nvs {
+		padding-top: 2px;
+		padding-bottom: 2px;
+		a {
+			color: #222;
+		}
+	}
+
+	@for $i from 1 to 7 {
+		div.level-#{$i} {
+			padding-left: #{20 * $i}px;
+			&:before {
+				content: '#{$i} - ';
+				font-size: 0.5em;
+			}
+			@if ($i == 1) {
+				font-size: 1.2em;
+				font-weight: bolder;
+			}
+			@if ($i == 2) {
+				font-size: 1.1em;
+				font-weight: bold;
+			}
+			&:first-child {
+				padding-top: 10px;
+			}
+			&:last-child {
+				padding-bottom: 10px;
+			}
+		}
+
+	}
+}

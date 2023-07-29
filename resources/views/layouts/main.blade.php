@@ -88,6 +88,9 @@
       <a class="text-white" href="https://github.com/Cristofer-Vargas" target="_blank">github</a>
     </div>
   </footer>
+
+  {{-- Scripts --}}
+  @yield('script')
 </body>
 
 </html>
