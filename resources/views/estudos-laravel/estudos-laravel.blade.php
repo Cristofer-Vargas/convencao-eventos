@@ -564,7 +564,7 @@ Route::post('/eventos', [EventoController::class, 'store']);
         </p>
 
         <h4>~/EventoController.php</h4>
-
+        
         <pre>
 public function store(Request $request) &#123;
 
@@ -586,6 +586,54 @@ return redirect('/');
           Desta forma respeitamos que a Request complete o Model com os dados para então usar o método 
           <code>$evento->save()</code> para salva-los no banco de dados. Em seguida redirecionamos o usuário para 
           a página inicial com o comando <code>return redirect('')</code>.
+        </p>
+
+        <h2>Flash Messages</h2>
+
+        <ul>
+          <li>Podemos adicionar mensagens ao usuário por <code>session</code></li>
+          <li>Estas mensagens são conhecidas por <code>Flash Messages</code></li>
+          <li>Podemos adicionar com o método <code>with</code> no <code>Controller</code></li>
+          <li>Utilizadas para apresentar um feedback ao usuário</li>
+          <li>No blade podemos verificar a presença da mensagem pela diretiva <code>&#64;session</code></li>
+        </ul>
+        
+        <p>
+          Por exemplo, quando criamos um evento, é super intuitivo e prático usar este recurso do Laravel, pois permite 
+          que possamos apresentar uma menssagem de sucesso ou de feedback para o usuário sobre o status do evento criado
+          , neste caso, devemos usar o método <code>with('')</code> no <code>redirect('')</code> para que possamos retornar
+          a menssagem desejada:
+        </p>
+
+        <h4>~/EventoController.php</h4>
+
+        <pre>
+return redirect('/')->with('msg', 'Evento criado com sucesso!');
+</pre>
+
+        <p>
+          Desta forma mandamos para a rota '/' com um <code>sessiona('msg')</code> que será o identificador desta
+          menssagem.
+        </p>
+
+        <p>
+          Agora no blade devemos verificar se esta mensagem existe / está atribuida, e imprimi-la conforme quisermos.
+        </p>
+
+        <h4>~/views/welcome.blade.php</h4>
+
+        <pre>
+&#64;if (session('msg'))
+
+  &lt;div class="alert alert-success" role="alert">
+    &#123;&#123; session('msg') &#125;&#125;
+  &lt;/div>
+
+&#64;endif
+</pre>
+
+        <p>
+          Neste caso estamos utilizando um estilo do <code>Bootstrap</code> para apresentarmos a menssagem.
         </p>
 
       </section>
