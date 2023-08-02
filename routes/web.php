@@ -18,7 +18,8 @@ use Illuminate\Support\Facades\Route;
 */
 
 Route::get('/', [EventoController::class, 'index']);
-Route::get('eventos/criar/', [EventoController::class, 'create']);
+Route::get('/eventos/criar/', [EventoController::class, 'create']);
+Route::post('/eventos', [EventoController::class, 'store']);
 
 Route::get('/estudos-laravel', [EstudosLaravel::class, 'index']);
 

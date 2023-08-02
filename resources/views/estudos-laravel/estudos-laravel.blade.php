@@ -535,14 +535,58 @@ class EventoController extends Controller
         <h2>Adicionando registro ao banco</h2>
 
         <ul>
-          <li>No Laravel é comum ter uma <code>action</code> específica para o <code>POST</code>
+          <li>No Laravel é comum ter uma <code>action</code> / <code>método</code> específica para o <code>POST</code>
             , chamada de <code>store</code></li>
-          <li>Lá vamos criar o objeto e compor ele com basse nos dados enviados pelo
-            <code>POST</code>
-          </li>
-          <li>Com o objeto formado utilizamos o método <code>save</code> para persistir os
-            dados</li>
+          <li>Lá vamos criar o objeto e compor ele com basse nos dados enviados pelo <code>POST</code></li>
+          <li>Com o objeto formado utilizamos o método <code>save</code> para persistir os dados</li>
         </ul>
+
+        <p>
+          Primeiramente criamos o formulário com os inputs necessários, não esquecendo de por o atributo 
+          <code>name</code> para acessá-los posteriormente, e então definirmos <code>action</code> do formulário 
+          para <code>/eventos/</code> e o <code>method</code> como <code>POST</code>
+        </p>
+
+        <p>
+          Com base nesta <code>action</code>, nós criamos a rota corresponde usando <code>Route::post('')</code> da 
+          seguinte forma:
+        </p>
+
+        <h4>~/routes/web.php</h4>
+        
+        <pre>
+Route::post('/eventos', [EventoController::class, 'store']);
+</pre>
+
+        <p>
+          Assim, tendo o método no controller <code>EventoController</code>, estaremos recebendo esses dados do tipo 
+          <code>Request</code>, onde iremos preencher o <code>Model</code> de Evento no método da seguinte forma:
+        </p>
+
+        <h4>~/EventoController.php</h4>
+
+        <pre>
+public function store(Request $request) &#123;
+
+$evento = new Evento;
+
+$evento->titulo = $request->titulo;
+$evento->cidade = $request->cidade;
+$evento->privado = $request->privado;
+$evento->descricao = $request->descricao;
+
+$evento->save();
+
+return redirect('/');
+
+&#125;
+</pre>
+
+        <p>
+          Desta forma respeitamos que a Request complete o Model com os dados para então usar o método 
+          <code>$evento->save()</code> para salva-los no banco de dados. Em seguida redirecionamos o usuário para 
+          a página inicial com o comando <code>return redirect('')</code>.
+        </p>
 
       </section>
     </article>

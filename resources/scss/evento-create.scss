@@ -1,0 +1,24 @@
+@use './variables.scss' as *;
+
+section.main-content {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+
+  h1 {
+    margin-bottom: 20px;
+    font-weight: bolder;
+    color: $primary;
+  }
+
+  form {
+
+    div.submit-btn {
+      display: flex;
+      justify-content: center;
+    }
+
+  }
+
+}
