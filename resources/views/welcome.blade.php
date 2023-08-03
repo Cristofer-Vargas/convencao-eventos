@@ -34,7 +34,7 @@
       @else
         @foreach ($data['eventos'] as $evento)
           <div class="card col-3">
-            <img src="https://picsum.photos/600/400/" class="card-img-top" title="{{ $evento->titulo }}"
+            <img src="/imgs/eventos/{{ $evento->imagem }}" class="card-img-top" title="{{ $evento->titulo }}"
               alt="{{ $evento->titulo }}">
             <div class="card-body">
               <time class="card-date">23/07/2023</time>

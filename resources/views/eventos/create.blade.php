@@ -12,8 +12,12 @@
 
     <h1 class="text-center">Crie seu evento</h1>
 
-    <form class="row g-3" action="/eventos/" method="POST">
+    <form class="row g-3" action="/eventos" method="POST" enctype="multipart/form-data">
       @csrf
+      <div class="col-md-12">
+        <label for="imagem" class="form-label">Imagem do evento</label>
+        <input type="file" class="form-control" name="imagem" id="imagem" placeholder="Imagem de capa do evento">
+      </div>
       <div class="col-md-12">
         <label for="titulo" class="form-label">Nome</label>
         <input type="text" class="form-control" name="titulo" id="titulo" placeholder="Ex.: Evento de JavaScript">

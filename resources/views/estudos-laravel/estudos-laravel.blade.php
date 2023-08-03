@@ -542,29 +542,29 @@ class EventoController extends Controller
         </ul>
 
         <p>
-          Primeiramente criamos o formulário com os inputs necessários, não esquecendo de por o atributo 
-          <code>name</code> para acessá-los posteriormente, e então definirmos <code>action</code> do formulário 
+          Primeiramente criamos o formulário com os inputs necessários, não esquecendo de por o atributo
+          <code>name</code> para acessá-los posteriormente, e então definirmos <code>action</code> do formulário
           para <code>/eventos/</code> e o <code>method</code> como <code>POST</code>
         </p>
 
         <p>
-          Com base nesta <code>action</code>, nós criamos a rota corresponde usando <code>Route::post('')</code> da 
+          Com base nesta <code>action</code>, nós criamos a rota corresponde usando <code>Route::post('')</code> da
           seguinte forma:
         </p>
 
         <h4>~/routes/web.php</h4>
-        
+
         <pre>
 Route::post('/eventos', [EventoController::class, 'store']);
 </pre>
 
         <p>
-          Assim, tendo o método no controller <code>EventoController</code>, estaremos recebendo esses dados do tipo 
+          Assim, tendo o método no controller <code>EventoController</code>, estaremos recebendo esses dados do tipo
           <code>Request</code>, onde iremos preencher o <code>Model</code> de Evento no método da seguinte forma:
         </p>
 
         <h4>~/EventoController.php</h4>
-        
+
         <pre>
 public function store(Request $request) &#123;
 
@@ -583,8 +583,8 @@ return redirect('/');
 </pre>
 
         <p>
-          Desta forma respeitamos que a Request complete o Model com os dados para então usar o método 
-          <code>$evento->save()</code> para salva-los no banco de dados. Em seguida redirecionamos o usuário para 
+          Desta forma respeitamos que a Request complete o Model com os dados para então usar o método
+          <code>$evento->save()</code> para salva-los no banco de dados. Em seguida redirecionamos o usuário para
           a página inicial com o comando <code>return redirect('')</code>.
         </p>
 
@@ -597,11 +597,12 @@ return redirect('/');
           <li>Utilizadas para apresentar um feedback ao usuário</li>
           <li>No blade podemos verificar a presença da mensagem pela diretiva <code>&#64;session</code></li>
         </ul>
-        
+
         <p>
-          Por exemplo, quando criamos um evento, é super intuitivo e prático usar este recurso do Laravel, pois permite 
+          Por exemplo, quando criamos um evento, é super intuitivo e prático usar este recurso do Laravel, pois permite
           que possamos apresentar uma menssagem de sucesso ou de feedback para o usuário sobre o status do evento criado
-          , neste caso, devemos usar o método <code>with('')</code> no <code>redirect('')</code> para que possamos retornar
+          , neste caso, devemos usar o método <code>with('')</code> no <code>redirect('')</code> para que possamos
+          retornar
           a menssagem desejada:
         </p>
 
@@ -634,6 +635,82 @@ return redirect('/')->with('msg', 'Evento criado com sucesso!');
 
         <p>
           Neste caso estamos utilizando um estilo do <code>Bootstrap</code> para apresentarmos a menssagem.
+        </p>
+
+        <h2>Salvando imagem no Laravel</h2>
+
+        <ul>
+          <li>Para fazer o upload de imagens precisamos mudar o <code>enctype</code> do form e também criar o input
+            de envio</li>
+          <li>No controller fazemos um tratamento de verificação da imagem que foi enviada</li>
+          <li>Depois salvaremos com um nome <code>único</code> em um diretório do projeto</li>
+          <li>No banco salvamos apenas o <code>path</code> para a imagem</li>
+        </ul>
+
+        <p>
+          Primeiramente inserimos a coluna <code>imagem</code> na tabela de <code>eventos</code> no banco de dados.
+          Para isso, como mostrado anteriormente rodaremos uma <code>migration</code> usando da convenção do laravel,
+          para inserir uma coluna com o seguinte comando:
+        </p>
+
+        <pre>
+php artisan make:migration add_imagem_to_eventos_table
+</pre>
+
+        <p>
+          Agora tendo a coluna na tabela, podemos adicionar um <code>input</code> do tipo <code>file</code> para podermos
+          carregar um arquivo de imagem. Juntamente com esse input no formulário, é de suma importância de adicionarmos
+          a propriedade <code>enctype="multipart/form-data"</code> na tag <code>form</code>, pois estaremos indicando
+          que o formulário estará enviando multi formatos encriptados.
+        </p>
+
+        <p>
+          Depois disso, deveremos receber e tratar os dados no controller responsável. Como dito e feito anteriormente,
+          a rota que o formulário envia os dados, está definido para o método post, onde ativará o seguinte método
+          <code>store()</code>, que por convenção recebe este nome pois trata de dados vindos de formulário.
+        </p>
+
+        <h4>~/EventoController</h4>
+
+        <pre>
+public function store(Request $request) &#123;
+  $evento = new Evento;
+
+  $evento->titulo = $request->titulo;
+  $evento->cidade = $request->cidade;
+  $evento->descricao = $request->descricao;
+  $evento->privado = $request->privado;
+
+  if ($request->hasFile('imagem') && $request->file('imagem')->isValid()) &#123;
+      
+      $requestImage = $request->imagem;
+      $extension = $requestImage->extension();
+      $imageName = md5($requestImage->getClientOriginalName() . strtotime('now')) . "." . $extension;
+
+      $requestImage->move(public_path('imgs/eventos'), $imageName);
+      $evento->imagem = $imageName;
+
+  &#125;
+
+  $evento->save();
+
+  return redirect('/')->with('msg', 'Evento criado com sucesso!');
+&#125;
+</pre>
+
+        <p>
+          Neste caso estamos recebendo os dados como uma <code>Request</code>, e preencheremos o Model <code>Evento</code>
+          com os dados capturados pela request. É importante que o nome acessado nas propriedades do request devem ser 
+          iguais as propriedades <code>name</code> de cada respectivo <code>input</code>.
+        </p>
+
+        <p>
+          Se houver uma imagem sendo enviada pela request, será verificada se possui um arquivo com o nome <code>imagem</code>
+          e se este aqui é válido. Assim sendo, entrará no block, e <strong>capturará a extensão da imagem</strong>, 
+          <strong>encriptará o nome original do arquivo Juntamente com a data de agora em string</strong> e 
+          <strong>concatenará com a extensão</strong>. Logo após será pego este arquivo e enviado para o diretório 
+          público de origem <code>imgs/eventos</code> e o nome da imagem, depois será atribuido na propriedade
+          <code>imagem</code> do <code>model Eventos</code> o caminho desta imagem, assim será salvo no banco de dados
         </p>
 
       </section>
