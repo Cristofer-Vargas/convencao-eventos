@@ -22,7 +22,7 @@ class EventoController extends Controller
     }
 
     public function create() {
-        return view('eventos\create');
+        return view('eventos.create');
     }
 
     public function store(Request $request) {
@@ -47,5 +47,12 @@ class EventoController extends Controller
         $evento->save();
 
         return redirect('/')->with('msg', 'Evento criado com sucesso!');
+    }
+
+    public function show($id) {
+        
+        $evento = Evento::findOrFail($id);
+
+        return view('eventos.show', ['evento' => $evento]);
     }
 }

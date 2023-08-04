@@ -2,7 +2,7 @@
 
 @section('title', 'Estudos Laravel')
 @section('styles')
-  @vite(['resources/scss/estudos-laravel.scss'])
+  @vite(['resources/scss/estudos-laravel/estudos-laravel.scss'])
 @endsection
 
 @section('script')
@@ -711,6 +711,50 @@ public function store(Request $request) &#123;
           <strong>concatenará com a extensão</strong>. Logo após será pego este arquivo e enviado para o diretório 
           público de origem <code>imgs/eventos</code> e o nome da imagem, depois será atribuido na propriedade
           <code>imagem</code> do <code>model Eventos</code> o caminho desta imagem, assim será salvo no banco de dados
+        </p>
+
+        <h2>Resgatando registro individualmente</h2>
+
+        <ul>
+          <li>Resgataremos a penas um registro pelo <code>Eloquent</code></li>
+          <li>Será utilizado o método <code>findOrFail</code></li>
+          <li>Criaremos também uma view com rota para esta nova página</li>
+          <li>Esta view exibirá todas as funções do evento, informações e botões para interação</li>
+        </ul>
+
+        <p>
+          Primeiramente, constumizaremos o botão de <code>saiba mais</code> na view que lista todos os eventos
+          , definimos o <code>href=""</code> para mandarmos o <code>id</code> do evento para a rota a seguir:
+        </p>
+
+        <h4>~/web.php</h4>
+
+        <pre>
+Route::get('/evento/&#123;id&#125;', [EventoController::class, 'show']);
+</pre>
+
+        <p>
+          O método <code>show</code> é uma convenção, assim como <code>index</code> e <code>store</code>,
+          e indica que será tratado a penas um dado do banco, ou um evento específico neste caso. 
+          No exemplo a seguir, estamos usando o método do <code>Eloquent</code> chamado <code>findOrFail</code>
+          e passaremos como parâmetro o <code>id</code> do evento em específico. Este método está preparado
+          para retornar o objeto com os dados encontrados, ou um erro.
+        </p>
+
+        <h4>~/EventoController</h4>
+
+        <pre>
+public function show($id) &#123;
+
+  $evento = Evento::findOrFail($id);
+
+  return view('eventos.show', ['evento' => $evento]);
+&#125;
+</pre>
+
+        <p>
+          Neste caso podemos tratar com <code>try... catch</code> para entregarmos ao usuário, um possível
+          erro de forma clara.
         </p>
 
       </section>
