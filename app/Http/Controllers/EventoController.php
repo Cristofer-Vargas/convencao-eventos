@@ -32,6 +32,7 @@ class EventoController extends Controller
         $evento->cidade = $request->cidade;
         $evento->descricao = $request->descricao;
         $evento->privado = $request->privado;
+        $evento->items = $request->items;
 
         if ($request->hasFile('imagem') && $request->file('imagem')->isValid()) {
             

@@ -7,8 +7,7 @@
 
 // Variáveis
 $primary: #cd853f;
-$secondary: #00ABBD;
-$tertiary: #72F2EB;
+$secondary: #612ED9;
 
 $link-color: #45C4B0;
 $link-hover-color: #fff;
@@ -27,13 +26,11 @@ $theme-colors: (
   "link-hover-color": $link-hover-color,
 );
 
-//..adicionando uma nova paleta de cores
-$custom-colors:(
-  "tertiary": $tertiary
-);
-
-//..mesclando a nova paleta com a paleta padrão
-$theme-colors: map-merge($theme-colors , $custom-colors );
-
 //..importa o arquivo do Bootstrap
 @import "bootstrap/scss/bootstrap";
+
+.form-control:focus {
+  border-color: $secondary;
+  box-shadow: 0 0 0 0.25rem #{$secondary}20;
+  outline: 0; 
+}

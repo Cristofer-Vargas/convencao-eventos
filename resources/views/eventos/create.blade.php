@@ -38,6 +38,24 @@
         <textarea class="form-control" name="descricao" id="descricao"
           placeholder="O que vai acontecer no evento?"></textarea>
       </div>
+
+      <div class="col-md-12">
+        <input type="checkbox" name="items[]" id="item1" value="cadeiras">
+        <label for="item1">Cadeiras</label>
+      </div>
+      <div class="col-md-12">
+        <input type="checkbox" name="items[]" id="item2" value="comida-livre">
+        <label for="item2">Comida Livre</label>
+      </div>
+      <div class="col-md-12">
+        <input type="checkbox" name="items[]" id="item3" value="palco">
+        <label for="item3">Palco</label>
+      </div>
+      <div class="col-md-12">
+        <input type="checkbox" name="items[]" id="item4" value="brindes">
+        <label for="item4">Brindes</label>
+      </div>
+
       <div class="col-12 submit-btn">
         <button type="submit" class="col-md-2 btn btn-primary">Criar Evento</button>
       </div>

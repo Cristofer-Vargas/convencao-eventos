@@ -3,13 +3,20 @@
 @section('title', $evento->titulo)
 
 @section('styles')
+
+  <style>
+  .banner-evento {
+    background-image: url('/imgs/eventos/{{ $evento->imagem }}');
+  }
+  </style>
+
   @vite(['resources/scss/eventos/show.scss'])
 @endsection
+
 @section('content-main')
 
-  <section class="main-fullsize">
+  <section class="main-fullsize d-none d-lg-block">
     <section class="banner-evento">
-      <img class="img-fluid" src="/imgs/eventos/{{ $evento->imagem }}" alt="{{ $evento->titulo }}">
     </section>
   </section>
 
@@ -27,6 +34,18 @@
         <p>Sobre o Evento: <br>{{ $evento->descricao }}<p>
 
         <a class="btn btn-primary" href="#" role="button">Confirmar presença</a>
+
+        @if (!empty($evento->items))
+          <h3>O evento conta com:</h3>
+          <ul class="items-evento">
+            @foreach($evento->items as $item)
+              <li>
+                <i class="fa-solid fa-caret-right"></i>
+                {{ $item }}
+              </li>
+            @endforeach
+          </ul>
+        @endif
       </div>
 
     </div>

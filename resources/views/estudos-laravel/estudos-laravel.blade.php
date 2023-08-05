@@ -757,6 +757,63 @@ public function show($id) &#123;
           erro de forma clara.
         </p>
 
+        <h2>Salvando JSON no banco</h2>
+
+        <ul>
+          <li>Podemos salvar um conjunto de dados no banco para itens de múltipla escolha</li>
+          <li>Vamos criar um campo determinado de <code>json</code> via <code>migration</code></li>
+          <li>No front-end podemos utilizar <code>inputs com checkbox</code></li>
+        </ul>
+
+        <p>
+          Salvar em JSON no banco de dados pode ser de grande praticidade caso seja necessário salvar no
+          banco, múltiplos dados em um único campo. Por exemplo, quando temos de salvar as opções de
+          inputs do tipo <code>checkbox</code>, como neste caso:
+        </p>
+
+        <h4>~/create.blade.php</h4>
+
+        <pre>
+&lt;div class="col-md-12">
+  &lt;input type="checkbox" name="items[]" id="item1" value="cadeiras">
+  &lt;label for="item1">Cadeiras&lt;/label>
+&lt;/div>
+&lt;div class="col-md-12">
+  &lt;input type="checkbox" name="items[]" id="item2" value="comida-livre">
+  &lt;label for="item2">Comida Livre&lt;/label>
+&lt;/div>
+&lt;div class="col-md-12">
+  &lt;input type="checkbox" name="items[]" id="item3" value="palco">
+  &lt;label for="item3">Palco&lt;/label>
+&lt;/div>
+&lt;div class="col-md-12">
+  &lt;input type="checkbox" name="items[]" id="item4" value="brindes">
+  &lt;label for="item4">Brindes&lt;/label>
+&lt;/div>
+</pre>
+
+        <p>
+          Neste caso para capturamos pelo <code>controller</code> posteriormente, devemos definirmos o
+          <code>name</code> como um array, para que seja capturado dentro de um array. A partir disto,
+          no <code>controller</code> salvamos normalmente como uma propriedade de <code>Evento</code>
+        </p>
+
+        <div class="alert alert-warning" role="alert">
+          <i class="fa fa-warning" aria-hidden="true"></i>
+          Note que ao mexer no <code>controller</code> e salvar em sua propriedade, ele estará sendo refletido das 
+          colunas que possuem no banco de dados, ou seja, deve ser adicionado o campo com uma migration.
+        </div>
+
+        <pre>
+php artisan make:migration add_items_to_eventos_table
+</pre>
+
+        <h4>~/Migration</h4>
+
+        <pre>
+$table->json('items');
+</pre>
+
       </section>
     </article>
   </section>
