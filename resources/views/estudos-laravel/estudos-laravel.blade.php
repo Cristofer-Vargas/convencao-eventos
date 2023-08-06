@@ -700,15 +700,16 @@ public function store(Request $request) &#123;
 
         <p>
           Neste caso estamos recebendo os dados como uma <code>Request</code>, e preencheremos o Model <code>Evento</code>
-          com os dados capturados pela request. É importante que o nome acessado nas propriedades do request devem ser 
+          com os dados capturados pela request. É importante que o nome acessado nas propriedades do request devem ser
           iguais as propriedades <code>name</code> de cada respectivo <code>input</code>.
         </p>
 
         <p>
-          Se houver uma imagem sendo enviada pela request, será verificada se possui um arquivo com o nome <code>imagem</code>
-          e se este aqui é válido. Assim sendo, entrará no block, e <strong>capturará a extensão da imagem</strong>, 
-          <strong>encriptará o nome original do arquivo Juntamente com a data de agora em string</strong> e 
-          <strong>concatenará com a extensão</strong>. Logo após será pego este arquivo e enviado para o diretório 
+          Se houver uma imagem sendo enviada pela request, será verificada se possui um arquivo com o nome
+          <code>imagem</code>
+          e se este aqui é válido. Assim sendo, entrará no block, e <strong>capturará a extensão da imagem</strong>,
+          <strong>encriptará o nome original do arquivo Juntamente com a data de agora em string</strong> e
+          <strong>concatenará com a extensão</strong>. Logo após será pego este arquivo e enviado para o diretório
           público de origem <code>imgs/eventos</code> e o nome da imagem, depois será atribuido na propriedade
           <code>imagem</code> do <code>model Eventos</code> o caminho desta imagem, assim será salvo no banco de dados
         </p>
@@ -735,7 +736,7 @@ Route::get('/evento/&#123;id&#125;', [EventoController::class, 'show']);
 
         <p>
           O método <code>show</code> é uma convenção, assim como <code>index</code> e <code>store</code>,
-          e indica que será tratado a penas um dado do banco, ou um evento específico neste caso. 
+          e indica que será tratado a penas um dado do banco, ou um evento específico neste caso.
           No exemplo a seguir, estamos usando o método do <code>Eloquent</code> chamado <code>findOrFail</code>
           e passaremos como parâmetro o <code>id</code> do evento em específico. Este método está preparado
           para retornar o objeto com os dados encontrados, ou um erro.
@@ -800,7 +801,7 @@ public function show($id) &#123;
 
         <div class="alert alert-warning" role="alert">
           <i class="fa fa-warning" aria-hidden="true"></i>
-          Note que ao mexer no <code>controller</code> e salvar em sua propriedade, ele estará sendo refletido das 
+          Note que ao mexer no <code>controller</code> e salvar em sua propriedade, ele estará sendo refletido das
           colunas que possuem no banco de dados, ou seja, deve ser adicionado o campo com uma migration.
         </div>
 
@@ -813,6 +814,67 @@ php artisan make:migration add_items_to_eventos_table
         <pre>
 $table->json('items');
 </pre>
+
+        <h2>Salvando Datas</h2>
+
+        <p>
+          Para salvar data e hora no geral é muito simples. Faremos o mesmo que os demais, adicionando a coluna
+          <code>data</code> com <code>migration</code>, e adicionamos o input com
+          <code>type="datetime-local"</code> para mandarmos uma data e horário.
+        </p>
+
+        <p>
+          Feito isso, agora devemos modificar o <code>Model</code> de <code>Evento</code> da seguinte forma:
+        </p>
+
+        <h4>~/Models/Evento.php</h4>
+
+        <pre>
+class Evento extends Model
+&#123;
+  ...
+
+  protected $dates = [
+    'data'
+  ];
+&#125;
+</pre>
+
+        <p>
+          Quando definimos <code>data</code> em uma propriedade <code>$dates</code>, estamos dizendo ao Laravel
+          que esta(s) coluna, terá propriedades e objeto do tipo de data e hora, onde o Laravel fornece / extende
+          de uma biblioteca "especializada" em manipular data e hora, assim, fornecendo métodos extras para estas
+          manipulações.
+        </p>
+
+        <p>
+          Feito isso, no <code>EventoController</code> fazemos de forma normal como ja o fizemos anteriormente:
+        </p>
+
+        <h4>~/EventoController</h4>
+
+        <pre>
+... 
+$evento->data = $request->data;
+... 
+</pre>
+
+        <p>
+          O que muda agora, neste caso, é como iremos mostrar ao usuário, como a data será formatada usando o blade:
+        </p>
+
+        <h4>~/welcome.blade.php e ~/show.blade.php</h4>
+
+        <pre>
+...
+&lt;p>&#123;&#123; date('d/m/Y H:i:s', strtotime($evento->data)) &#125;&#125;&lt;/p>
+...
+</pre>
+
+        <p>
+          Desta forma, estamos formatando a data vindo do controller para que seja exibida no formato 
+          <code><b>DIA</b>/<b>MÊS</b>/<b>ANO_INTEIRO</b> <b>HORA_EM_ 24H</b>/<b>MINUTOS</b>/<b>SEGUNDOS</b></code>
+        </p>
 
       </section>
     </article>

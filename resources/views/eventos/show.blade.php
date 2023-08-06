@@ -31,6 +31,7 @@
         <p><i class="fa-solid fa-location-dot"></i> {{ $evento->cidade }}</p>
         <p><i class="fa fa-users" aria-hidden="true"></i> X participantes</p>
         <p><i class="fa fa-user" aria-hidden="true"></i> Dono do Evento</p>
+        <p><i class="fa fa-calendar" aria-hidden="true"></i> {{ date('d/m/Y H:i', strtotime($evento->data)) }}</p>
         <p>Sobre o Evento: <br>{{ $evento->descricao }}<p>
 
         <a class="btn btn-primary" href="#" role="button">Confirmar presença</a>

@@ -27,6 +27,10 @@
         <input type="text" class="form-control" name="cidade" id="cidade" placeholder="Local do Evento">
       </div>
       <div class="col-md-12">
+        <label for="data" class="form-label">Data</label>
+        <input type="datetime-local" class="form-control" name="data" id="data" placeholder="Data">
+      </div>
+      <div class="col-md-12">
         <label for="privado" class="form-label">O evento é privado?</label>
         <select class="form-control" id="privado" name="privado">
           <option value="0">Não</option>

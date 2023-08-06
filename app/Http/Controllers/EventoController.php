@@ -15,7 +15,7 @@ class EventoController extends Controller
             $data['res'] = true;
         } catch (Exception $ex) {
             $data['res'] = false;
-            $data['info'] = 'Erro ao conectar com o banco de dados na tabela "Eventos"';
+            $data['info'] = 'Erro ao conectar com o banco de dados';
         }
 
         return view('welcome', ['data' => $data]);
@@ -29,6 +29,7 @@ class EventoController extends Controller
         $evento = new Evento;
 
         $evento->titulo = $request->titulo;
+        $evento->data = $request->data;
         $evento->cidade = $request->cidade;
         $evento->descricao = $request->descricao;
         $evento->privado = $request->privado;
