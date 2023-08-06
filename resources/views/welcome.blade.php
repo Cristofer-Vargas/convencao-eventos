@@ -16,8 +16,14 @@
   <section class="main-content">
 
     <div class="container-eventos" id="eventsContainer" class="col-12">
-      <h2>Próximos Eventos</h2>
-      <p class="next-events">Veja os eventos dos próximos dias</p>
+      
+      @if (!empty($data['textBusca']) && $data['busca'] == true)
+        <h2>Resultados para: </h2>
+        <p class="next-events"><strong>{{ $data['textBusca'] }}</strong></p>
+      @else
+        <h2>Próximos Eventos</h2>
+        <p class="next-events">Veja os eventos dos próximos dias</p>
+      @endif
 
       @if (session('msg'))
 
@@ -36,7 +42,7 @@
       @elseif (count($data['eventos']) == 0)
         <div class="alert alert-info" role="alert">
           Não há eventos disponíveis!
-        </div>      
+        </div>
       @else
         @foreach ($data['eventos'] as $evento)
           <div class="card col-3">

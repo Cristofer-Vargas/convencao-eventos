@@ -8,11 +8,25 @@ use Exception;
 
 class EventoController extends Controller
 {
-    public function index() {
+    public function index(Request $request) {
         
         try {
-            $data['eventos'] = Evento::all();
+
+            if (!empty($request)) {
+                $busca = $request->busca;
+
+                $data['eventos'] = Evento::where([
+                    ['titulo', 'like', '%'.$busca.'%']
+                ])->get();
+                $data['busca'] = true;
+                $data['textBusca'] = $busca;
+                
+            } else {
+                $data['eventos'] = Evento::all();
+            }
+
             $data['res'] = true;
+
         } catch (Exception $ex) {
             $data['res'] = false;
             $data['info'] = 'Erro ao conectar com o banco de dados';

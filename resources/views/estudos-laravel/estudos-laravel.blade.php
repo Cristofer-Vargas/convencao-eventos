@@ -876,6 +876,52 @@ $evento->data = $request->data;
           <code><b>DIA</b>/<b>MÊS</b>/<b>ANO_INTEIRO</b> <b>HORA_EM_ 24H</b>/<b>MINUTOS</b>/<b>SEGUNDOS</b></code>
         </p>
 
+        <h2>Busca no Laravel</h2>
+
+        <ul>
+          <li>Para realizar a busca utilizaremos o <code>Eloquent</code> sedido ao <code>Model</code></li>
+          <li>Utilizaremos o método <code>where</code> para escolhermos como selecionar os dados por coluna</li>
+        </ul>
+
+        <p>
+          De uma forma geral, pesquisar no banco de dados pode ser uma tarefa fácil utilizando o <code>Eloquent</code>
+          a nosso favor, por exemplo:
+        </p>
+
+        <h4>~/EventoController</h4>
+
+        <pre>
+if (!empty($request)) &#123;
+  $busca = $request->busca;
+
+  $data['eventos'] = Evento::where([
+      ['titulo', 'like', '%'.$busca.'%']
+  ])->get();
+  $data['busca'] = true;
+  $data['textBusca'] = $busca;
+  
+&#125; else &#123;
+  $data['eventos'] = Evento::all();
+&#125;
+</pre>
+
+        <p>
+          Neste caso estamos armazenando os dados em um array <code>$data</code>, mas poderíamos salvar e mandar 
+          separamente pela <code>view</code>. Usando o <code>Model</code> de evento, usamos o método sedido pelo 
+          <code>Eloquent</code>, <code>where</code>, que representa uma busca por dados em uma coluna com dados
+          específicos. Passamos um array de arrays, para que futuramente possamos passar outras campoes e dados
+          específicos para pesquisar na tabela. Neste caso de array, pedimos para que seja feito na coluna 
+          <code>titulo</code>, com a atribuição <code>like</code> que na hora de buscar dados, ele não buscara 
+          dados precisamente como foi mandando, mas tais dados "como" ou semelhante ao que foi passado.
+          E depois utilizamos a formatação <code>% $busca %</code> para que possamos buscar em qualquer parte 
+          do título.
+        </p>
+
+        <p>
+          Depois só seguimos a lógica e na view podemos capturar esses dados, ou como eu coloquei em outra chave 
+          de valor, o texto que foi utilizado para realizar a busca, assim só apresentamos na view com o blade.
+        </p>
+
       </section>
     </article>
   </section>
