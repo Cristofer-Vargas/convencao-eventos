@@ -37,36 +37,59 @@
                 Eventos
               </a>
             </li>
-            <li class="nav-item">
-              <a class="nav-link" href="/eventos/criar">
-                Criar Eventos
-              </a>
+
+            @auth
+              <li class="nav-item">
+                <a class="nav-link" href="/eventos/criar">
+                  Criar Eventos
+                </a>
+              </li>
+            @endauth
+
             <li class="nav-item">
               <a class="nav-link" href="/estudos-laravel">
                 Documentação de Estudos
               </a>
             </li>
-            <li class="nav-item">
-              <a class="nav-link" href="#">
-                Criar Conta
-              </a>
-            </li>
 
-            <li class="nav-item dropdown">
-              <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown"
-                aria-expanded="false">
-                Conta
-              </a>
-              <ul class="dropdown-menu">
-                <li><a class="dropdown-item" href="#">
-                    Editar Conta
-                  </a></li>
-                <li>
-                  <hr class="dropdown-divider">
-                </li>
-                <li><a class="dropdown-item" href="#">Sair</a></li>
-              </ul>
-            </li>
+            @guest
+              <li class="nav-item">
+                <a class="nav-link" href="/register">
+                  Criar Conta
+                </a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link" href="/login">
+                  Entrar
+                </a>
+              </li>
+            @endguest
+
+            @auth
+              <li class="nav-item dropdown">
+                <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown"
+                  aria-expanded="false">
+                  Conta
+                </a>
+                <ul class="dropdown-menu">
+                  <li><a class="dropdown-item" href="#">
+                      Editar Conta
+                    </a></li>
+                  <li><a class="dropdown-item" href="/dashboard">
+                      Meus eventos
+                    </a></li>
+                  <li>
+                    <hr class="dropdown-divider">
+                  </li>
+                  <li class="text-center">
+                    <form action="/logout" method="POST">
+                      @csrf
+                      <button type="submit" class="btn w-full">Sair</button>
+                    </form>
+                  </li>
+                </ul>
+              </li>
+            @endauth
 
           </ul>
           <form class="d-flex" role="search" action="/" method="GET">

@@ -922,6 +922,107 @@ if (!empty($request)) &#123;
           de valor, o texto que foi utilizado para realizar a busca, assim só apresentamos na view com o blade.
         </p>
 
+        <h2>Autentiação no Laravel</h2>
+
+        <ul>
+          <li>A autenticação pode ser aplicada utilizando o <code>Jetstream</code></li>
+          <li>O pacote deve ser instalado usando o <code>composer</code></li>
+          <li>Instalamos também o <code>Livewire</code>, que são componenetes de autenticação para o Blade</li>
+        </ul>
+
+        <h3>Jetstream</h3>
+
+        <p>
+          O <code>Jetstream</code> é um kit de pacotes ou kit de ferramentas, que junta alguns pacotes com finalidades distintas que auxiliam fortementes o desenvolvimento de aplicações em Laravel, neste caso irá nos fornecer métodos de realizar autentiação, registro, login, etc.
+        </p>
+
+        <p>
+          O <code>Jetstream</code> possui duas principais "stacks", e a que iremos trabalhar aqui, é o <code>Livewire</code>, que nos permite trabalhar com reatividade de dados, autenticação, etc, no lado do servidor utilizando o próprio blade do Laravel.
+        </p>
+
+        <p>
+          Principais pacotes são:
+        </p>
+
+        <h5>Fortify</h5>
+        
+        <p>
+          É responsável por gerenciar usuários e fornecer autentiação, registro, login de usuário, eutenticação de email, autenticação de dois fatores, etc.
+        </p>
+
+        <h5>Sanctum</h5>
+
+        <p>
+          É responsável por gerenciar e aplicar autenticações por tokens, verificar token do usuário, etc.
+        </p>
+
+        <p>
+          Para instalar ambos os recursos, <code>Jetstream</code> e <code>Livewire</code> usaremos os seguintes comandos:
+        </p>
+
+        <pre>
+composer require laravel/jetstram
+php artisan jetstram:install livewire
+</pre>
+
+        <p>
+          Apóes instalar o <code>jetstram</code>, o mesmo irá nos conseder muitas coisas prontas, tais como <code>views</code> e <code>classes</code> especializadas para o que possamos realizar autenticações, verificações de token, entre outras funcionalidades que as classes nos permitem trabalhar.
+        </p>
+        
+        <p>
+          Fora classes, views e componentes prontos do <code>jetstram</code>, também teremos algumas <code>migrations</code>, onde precisaremos enviar ao banco.
+        </p>
+
+        <p>
+          Logo após, executaremos estes comandos para instalar as dependências e construir o front-end da aplciação:
+        </p>
+
+        <pre>
+npm install
+npm run dev
+</pre>
+
+        <h3>Exibir conteúdo se estiver logado</h3>
+
+        <p>
+          Agora, melhor do que usar um <code>if()...else</code> para mostrar um determinado conteúdo se o usuário estiver ou não logado no sistema, é nós utilizarmos uma diretiva específica, cedida pelo <code>livewire</code>, chamada de <code>&#64;auth</code> para mostrar um conteúdo se o usuário estiver logado e autenticado, e a diretiva <code>&#64;guest</code> para conteúdo se o mesmo não estiver logado e autenticado. Segue um exemplo:
+        </p>
+
+        <h4>~/layouts/main.blade.php</h4>
+
+        <pre>
+&#64;auth
+  &lt;p>Conteúdo para usuários logados&lt;/p>
+&#64;endauth
+
+&#64;guest
+  &lt;p>Conteúdo para usuários não logados&lt;/p>
+&#64;endguest
+</pre>
+
+        <p>
+          E para fazermos o <code>logou</code>, ou no caso, para sairmos da conta / desautenticarmos o usuário, nós teremos de incrimentar um formulário, enves de simplesmente um link de redirecionamento.
+        </p>
+
+        <p>
+          Por exemplo, no header temos uma navbar construido com <code>ul</code> e <code>li</code>, e no item para sair ou fazer <code>logout</code> deve ser feito da seguinte forma:
+        </p>
+
+        <h4>~/layouts/main.blade.php</h4>
+
+        <pre>
+&lt;li class="text-center">
+  &lt;form action="/logout" method="POST">
+  &#64;csrf
+    &lt;button type="submit" class="btn w-full">Sair&lt;/button>
+  &lt;/form>
+&lt;/li>
+</pre>
+
+        <p>
+          O <code>logout</code> deve ser feito com um formulário pois enviamos a requisição como <code>POST</code> para que o <code>jetstram</code> possa receber a de fazer realziar a função de <code>logout</code>. Poderíamos utilizar um <code>&#64;a></code> âncora, mas teríamos de utilizar <code>javascript</code> para previnirmos seu reridicionamento e para submeter o formulário para caminho em questão
+        </p>
+
       </section>
     </article>
   </section>

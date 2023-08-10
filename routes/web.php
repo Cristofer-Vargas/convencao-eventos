@@ -23,3 +23,12 @@ Route::post('/eventos', [EventoController::class, 'store']);
 Route::get('/evento/{id}', [EventoController::class, 'show']);
 
 Route::get('/estudos-laravel', [EstudosLaravel::class, 'index']);
+Route::middleware([
+    'auth:sanctum',
+    config('jetstream.auth_session'),
+    'verified'
+])->group(function () {
+    Route::get('/dashboard', function () {
+        return view('dashboard');
+    })->name('dashboard');
+});
