@@ -5,9 +5,9 @@
 @section('styles')
 
   <style>
-  .banner-evento {
-    background-image: url('/imgs/eventos/{{ $evento->imagem }}');
-  }
+    .banner-evento {
+      background-image: url('/imgs/eventos/{{ $evento->imagem }}');
+    }
   </style>
 
   @vite(['resources/scss/eventos/show.scss'])
@@ -24,13 +24,17 @@
 
     <div class="row">
       <div class="col-md-6">
-        <img class="img-fluid rounded" src="/imgs/eventos/{{ $evento->imagem }}" alt="{{ $evento->titulo }}">
+        @if ($evento->imagem != null)
+          <img class="img-fluid rounded" src="/imgs/eventos/{{ $evento->imagem }}" alt="{{ $evento->titulo }}">
+        @else
+          <img class="img-fluid rounded" src="/imgs/default-event-image.jpg" alt="Evento não possue imagem, imagem padrão">
+        @endif
       </div>
       <div class="col-md-6">
         <h1>{{ $evento->titulo }}</h1>
         <p><i class="fa-solid fa-location-dot"></i> {{ $evento->cidade }}</p>
         <p><i class="fa fa-users" aria-hidden="true"></i> X participantes</p>
-        <p><i class="fa fa-user" aria-hidden="true"></i> Dono do Evento</p>
+        <p><i class="fa fa-user" aria-hidden="true"></i> {{ $user->name }}</p>
         <p><i class="fa fa-calendar" aria-hidden="true"></i> {{ date('d/m/Y H:i', strtotime($evento->data)) }}</p>
         <p>Sobre o Evento: <br>{{ $evento->descricao }}<p>
 

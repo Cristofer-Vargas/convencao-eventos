@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\Evento;
+use App\Models\User;
 use Exception;
 
 class EventoController extends Controller
@@ -60,6 +61,9 @@ class EventoController extends Controller
 
         }
 
+        $usuario = auth()->user();
+        $evento->usuario_id = $usuario->id;
+
         $evento->save();
 
         return redirect('/')->with('msg', 'Evento criado com sucesso!');
@@ -68,7 +72,8 @@ class EventoController extends Controller
     public function show($id) {
         
         $evento = Evento::findOrFail($id);
+        $usuario = User::where('id', $evento->usuario_id)->first();
 
-        return view('eventos.show', ['evento' => $evento]);
+        return view('eventos.show', ['evento' => $evento, 'user' => $usuario]);
     }
 }

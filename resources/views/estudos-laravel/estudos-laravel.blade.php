@@ -1023,6 +1023,152 @@ npm run dev
           O <code>logout</code> deve ser feito com um formulário pois enviamos a requisição como <code>POST</code> para que o <code>jetstram</code> possa receber a de fazer realziar a função de <code>logout</code>. Poderíamos utilizar um <code>&#64;a></code> âncora, mas teríamos de utilizar <code>javascript</code> para previnirmos seu reridicionamento e para submeter o formulário para caminho em questão
         </p>
 
+        <h2>Relações entre tabelas</h2>
+
+        <h3>One to many</h3>
+
+        <ul>
+          <li>Será criado relação de um para muitos entre usuário e eventos</li>
+          <li>Será alterado as <code>migrations</code>, adicionando uma chave estrangeira no model <code>Evento</code></li>
+        </ul>
+
+        <p>
+          A possibilidade de poder estabelecer esta relação de um para muitos, é excencial para banco de dados relacionais, pois permite que um único usuário possa ter vários eventos sendo dono de todos os mesmos.
+        </p>
+
+        <p>
+          Primeiramente iremos adicionar a coluna de chave estrangeira na tabela <code>Eventos</code> usando uma migration, respeitando as boas práticas do Laravel, usando o seguinte comando no terminal <code>php artisan make:migration add_usuario_id_to_eventos_table</code>, e definiremos o arquivo da seguinte forma para adicionar a coluna com chave estrangeira:
+        </p>
+
+        <h4>Migration - add_usuario_id_to_eventos_table</h4>
+
+        <pre>
+public function up(): void
+&#123;
+  Schema::table('eventos', function (Blueprint $table) &#123;
+    $table->foreignId('usuario_id')->constrained();
+  &#125;);
+&#125;
+
+public function down(): void
+&#123;
+  Schema::table('eventos', function (Blueprint $table) &#123;
+    $table->foreignId('usuario_id')->constrained()->onDelete('cascade');
+  &#125;);
+&#125;
+</pre>
+
+        <h5>function up()</h5>
+
+        <p>
+          Neste método utilizamos para criar a tabela estrangeira. Ma criação da mesma, utilizamos <code>foreignId</code> que o Laravel nos proporciona de maneira mais prática que esta coluna tem um tipo específico, essa é uma forma curta e direta da expressão abaixo:
+        </p>
+
+        <pre>
+$table->unsignedBigInteger('usuario_id');
+
+$table->foreign('usuario_id')->references('id')->on('users');
+</pre>
+
+        <p>
+          Também usamos o método <code>constrained()</code> para dizermos que <code>usuario_id</code> é uma chave estrangeira, e nesse caso devemos usar a convenção do Laravel e expressar corretamente o nome da coluna, para que essa associação seja feita de forma automática, onde logo ja será especificado que pelo nome, está chave esta associada a coluna <code>id</code> de <code>users</code>.
+        </p>
+
+        <h5>function down()</h5>
+
+        <p>
+          Neste caso o que muda é que encadeamos o método <code>onDelete('cascade')</code> que nos permite deletar todos os dados encadeados deste usuário.
+        </p>
+
+        <h4>~/Models/Evento.php</h4>
+
+        <p>
+          Incrementaremos no Model de <code>Evento</code> o seguinte trecho de código:
+        </p>
+
+        <pre>
+public function user() &#123;
+  return $this->belongsTo('App\Models\User');
+&#125;
+</pre>
+
+        <p>
+          Estamos adicionando ese código pois como cada evento precisa pertencer a um usuário, nós devemos associa-lo no Model para que seja feito o request do mesmo. O método <code>belongsTo()</code> refere-se que este <code>Evento</code> tera um único usuário, baseado no Model <code>User</code>.
+        </p>
+
+        <p>
+          Assim sendo, quando chamamos os dados de Evento, ele irá retornar atráves do método <code>user()</code> um objeto do usuário relacionado em questão.
+        </p>
+
+        <h4>~/Models/User.php</h4>
+
+        <p>
+          Da mesma forma que esclarecemos no <code>Evento</code> que terá um único <code>User</code>, nós passamos ao <code>User</code> que terá muitos eventos do tipo <code>Evento</code>, neste caso usamos outro método:
+        </p>
+
+        <pre>
+public function eventos() &#123;
+  return $this->hasMany('App\Models\Evento');
+&#125;
+</pre>
+
+        <p>
+          Este método condiz que haverá muitos ( <code>hasMany()</code> ) de <code>Evento</code>
+        </p>
+
+        <h4>~/EventoController</h4>
+
+        <p>
+          Agora, para salvar o usuário dono do evento que está sendo criado, precisaremos pegar o usuário logado na sessão, desta forma , antes de salvar os dados do formulário:
+        </p>
+
+        <pre>
+$usuario = auth()->user();
+$evento->usuario_id = $usuario->id;
+        </pre>
+
+        <p>
+          Antes de dar <code>$evento->save()</code> para salvar no banco, nós salvamos o usuário autenticado na sessão e logo salvamos seu <code>id</code> com a coluna <code>usuario_id</code> de eventos.
+        </p>
+
+        <h4>~/routes/web.php</h4>
+
+        <p>
+          Agora, como salvamos eventos apenas com usuários autenticados, devemos ter certeza que usuário não autenticados acessem esta parte da aplicação. Neste caso usaremos o método <code>middleware('auth')</code> que irá verificar se há usuário autenticado na sessão, para então permitir que o mesmo acesse a rota.
+        </p>
+
+        <pre>
+Route::get('/eventos/criar/', [EventoController::class, 'create'])->middleware('auth');
+        </pre>
+
+        <h3>Exibindo usuário da relação</h3>
+
+        <p>
+          Para exibir os dados do dono/user do evento na view, primeiramente precisamos encrontra-lo no banco com base o <code>usuario_id</code> da tabela eventos com o seguinte código no <code>EventoController</code> no método que é chamado na exibição da view:
+        </p>
+
+        <h4>~/EventoController</h4>
+
+        <pre>
+$usuario = User::where('id', $evento->usuario_id)->first();
+
+return view('eventos.show', ['evento' => $evento, 'user' => $usuario]);
+        </pre>
+
+        <p>
+          Desta forma estamos buscando o usuário corresponde ao <code>usuario_id</code> utilizando o <code>where</code> do <code>Eloquent</code>, e em seguida pegamos apenas o objeto do primeiro, com o método <code>first()</code>, depois passamo para a view com a chave <code>user</code>.
+        </p>
+
+        <h4>~/show.blade.php</h4>
+
+        <p>
+          E para exibir esse dado, é muito fácil, pois capturamos o objeto de usuário, então só precisamos exibir o 'name' da seguinte forma:
+        </p>
+
+        <pre>
+&lt;p>&lt;i class="fa fa-user" aria-hidden="true">&lt;/i> &#123;&#123; $user->name &#125;&#125;&lt;/p>
+</pre>
+
       </section>
     </article>
   </section>
