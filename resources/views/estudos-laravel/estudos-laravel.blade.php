@@ -1169,6 +1169,55 @@ return view('eventos.show', ['evento' => $evento, 'user' => $usuario]);
 &lt;p>&lt;i class="fa fa-user" aria-hidden="true">&lt;/i> &#123;&#123; $user->name &#125;&#125;&lt;/p>
 </pre>
 
+        <h2>Criando uma dashboard</h2>
+
+        <p>
+          Esta é uma área onde o usuário terá acesso a todos os seus eventos e também permitindo que o mesmo tenha mais controle e possa futuramente editar e deletar eventos.
+        </p>
+
+        <p>
+          Este é um processo simples, consiste em uma <code>view</code>, uma rota ( <code>route</code> ) para ela, e o <code>controller</code> para fornecer os dados necessários.
+        </p>
+
+        <h4>~/routes/web.php</h4>
+
+        <pre>
+Route::get('/dashboard', [EventoController::class, 'dashboard'])->middleware('auth');
+</pre>
+
+        <p>
+          Na rota bascicamente estamos defininto que a classe <code>EventoController</code> irá chamar o método <code>dashboard</code>, passando pela autentiação do <code>auth</code> especificado pelo <code>middleware</code> para que somente um usuário autenticado possa ter acesso a esta dashboard.
+        </p>
+
+        <h4>~/EventoController.php</h4>
+
+        <pre>
+public function dashboard() &#123;
+
+  $usuario = auth()->user();
+  $eventos = $usuario->eventos;
+
+  return view('eventos.dashboard', ['eventos' => $eventos]);
+
+&#125;
+</pre>
+
+        <p>
+          No <code>EventoController</code> estamos pegando o usuário autenticado na sessão, e pegando os dados do método:
+        </p>
+
+        <h4>~/Models/Evento.php</h4>
+
+        <pre>
+public function eventos() &#123;
+  return $this->hasMany(Evento::class);
+&#125;
+</pre>
+
+        <p>
+          Onde este método irá retornar objetos de <code>Evento</code> que estejam associados ao usuário. Então, após capturar estes eventos, passamos para a <code>view</code> desejada, e exibimos com um <code>foreach</code> por exemplo.
+        </p>
+
       </section>
     </article>
   </section>
