@@ -102,6 +102,14 @@
   </header>
 
   <main>
+    @if (session('msg'))
+      <section class="main-content">
+        <div class="alert alert-success" role="alert">
+          {{ session('msg') }}
+        </div>
+      </section>
+    @endif
+
     @yield('content-main')
   </main>
 

@@ -15,19 +15,15 @@ class EventoController extends Controller
 
             if (!empty($request)) {
                 $busca = $request->busca;
-
                 $data['eventos'] = Evento::where([
                     ['titulo', 'like', '%'.$busca.'%']
                 ])->get();
                 $data['busca'] = true;
                 $data['textBusca'] = $busca;
-                
             } else {
                 $data['eventos'] = Evento::all();
             }
-
             $data['res'] = true;
-
         } catch (Exception $ex) {
             $data['res'] = false;
             $data['info'] = 'Erro ao conectar com o banco de dados';
@@ -51,38 +47,33 @@ class EventoController extends Controller
         $evento->items = $request->items;
 
         if ($request->hasFile('imagem') && $request->file('imagem')->isValid()) {
-            
             $requestImage = $request->imagem;
             $extension = $requestImage->extension();
             $imageName = md5($requestImage->getClientOriginalName() . strtotime('now')) . "." . $extension;
-
             $requestImage->move(public_path('imgs/eventos'), $imageName);
             $evento->imagem = $imageName;
-
         }
 
         $usuario = auth()->user();
         $evento->user_id = $usuario->id;
-
         $evento->save();
-
         return redirect('/')->with('msg', 'Evento criado com sucesso!');
     }
 
     public function show($id) {
-        
         $evento = Evento::findOrFail($id);
         $usuario = User::where('id', $evento->user_id)->first();
-
         return view('eventos.show', ['evento' => $evento, 'user' => $usuario]);
     }
 
     public function dashboard() {
-
         $usuario = auth()->user();
         $eventos = $usuario->eventos;
-
         return view('eventos.dashboard', ['eventos' => $eventos]);
+    }
 
+    public function destroy($id) {
+        Evento::findOrFail($id)->delete();
+        return redirect('/dashboard')->with('msg', 'Evento Excluído com sucesso!');
     }
 }

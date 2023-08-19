@@ -19,6 +19,7 @@ use Illuminate\Support\Facades\Route;
 
 Route::get('/', [EventoController::class, 'index']);
 Route::get('/eventos/criar/', [EventoController::class, 'create'])->middleware('auth');
+Route::delete('/evento/excluir/{id}', [EventoController::class, 'destroy']);
 Route::post('/eventos', [EventoController::class, 'store']);
 Route::get('/evento/{id}', [EventoController::class, 'show']);
 Route::get('/dashboard', [EventoController::class, 'dashboard'])->middleware('auth');

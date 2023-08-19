@@ -25,14 +25,6 @@
         <p class="next-events">Veja os eventos dos próximos dias</p>
       @endif
 
-      @if (session('msg'))
-
-        <div class="alert alert-success" role="alert">
-          {{ session('msg') }}
-        </div>
-
-      @endif
-
       <div id="cardsContainer" class="card-eventos row">
 
       @if ($data['res'] == false)

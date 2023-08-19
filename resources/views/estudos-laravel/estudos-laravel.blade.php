@@ -1218,6 +1218,49 @@ public function eventos() &#123;
           Onde este método irá retornar objetos de <code>Evento</code> que estejam associados ao usuário. Então, após capturar estes eventos, passamos para a <code>view</code> desejada, e exibimos com um <code>foreach</code> por exemplo.
         </p>
 
+        <h2>Deletando eventos</h2>
+
+        <p>
+          De modo geral, é bem simples, precisamos estabelecer um <code>form</code> com <code>method</code> <code>POST</code> e enviar para uma rota com o <code>id</code> do evento.
+        </p>
+
+        <h4>~/dashboard.blade.php</h4>
+
+        <pre>
+&lt;form class="d-inline" action="/evento/excluir/&#123;&#123; $eventos->id &#125;&#125;" method="POST">
+  &#64;csrf
+  &#64;method('DELETE')
+  &lt;button class="btn btn-danger" type="submit">&lt;i class="fa fa-trash" aria-hidden="true">&lt;/i> Excluir&lt;/button>
+&lt;/form>
+</pre>
+
+        <p>
+          A diretiva <code>&#64;cstf</code> serve para garantir segurança no formulário. e a diretiva <code>&#64;method('DELETE')</code> que especifica o real método que será enviado e requisitado para o <code>controller</code>.
+        </p>
+
+        <h4>~/routes/web.php</h4>
+
+        <pre>
+Route::delete('/evento/excluir/&#123;id&#125;', [EventoController::class, 'destroy']);
+</pre>
+
+        <p>
+          Na rota é utilizado o método <code>delete</code> de <code>Route</code> e o método <code>destroy</code> seguindo a convenção do Laravel na classe do <code>EventoController</code>.
+        </p>
+
+        <h4>~/EventoController.php</h4>
+
+        <pre>
+public function destroy($id) &#123;
+  Evento::findOrFail($id)->delete();
+  return redirect('/dashboard')->with('msg', 'Evento Excluído com sucesso!');
+&#125;
+</pre>
+
+        <p>
+          No <code>EventoController</code> podemos apenas utilizar o método <code>findOrFail()</code> para encontrar o <code>id</code> passado, e logo usar o método <code>delete()</code> para deletar esse Evento. Logo após utilizamos do <code>redirect()</code> e o <code>with</code> para enviar uma menssagem na sessão, comunicando que o evento foi excluido com sucesso.
+        </p>
+
       </section>
     </article>
   </section>
