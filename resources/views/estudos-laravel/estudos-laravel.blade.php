@@ -1261,6 +1261,57 @@ public function destroy($id) &#123;
           No <code>EventoController</code> podemos apenas utilizar o método <code>findOrFail()</code> para encontrar o <code>id</code> passado, e logo usar o método <code>delete()</code> para deletar esse Evento. Logo após utilizamos do <code>redirect()</code> e o <code>with</code> para enviar uma menssagem na sessão, comunicando que o evento foi excluido com sucesso.
         </p>
 
+        <h2>Editando eventos</h2>
+
+        <p>
+          Para editar um evento em específico na nossa <code>dashboard</code> vamos precisar da lógica no <code>controller</code>, com rota HTTP do tipo <code>PUT</code>, e outra do tipo <code>get</code> onde retornará a <code>view</code> com os dados preenchidos para que possamos atualizar.
+        </p>
+
+        <h4>~/routes/web.php</h4>
+
+        <pre>
+Route::get('/evento/editar/{id}', [EventoController::class, 'edit'])->middleware('auth');
+Route::put('/evento/salvar/{id}', [EventoController::class, 'update'])->middleware('auth');
+</pre>
+
+        <p>
+          Aqui estamos especificando uma rota <code>get</code> para a <code>view</code> onde mostrará o formulário com os dados preenchidos. A outra rota <code>put</code> serve para o <code>controller</code> capturar e salvar os dados deste formulário.
+        </p>
+
+        <h4>~/EventoController</h4>
+
+        <pre>
+public function edit($id) &#123;
+  $evento = Evento::findOrFail($id);
+  return view('eventos.edit', ['evento' => $evento]);
+&#125;
+</pre>
+
+        <p>
+          Está é a função chamada pela rota <code>get</code>, utilizando do <code>id</code> do evento passado, e inserindo na <code>view</code> para preencher o formulário para que o usuário possa atualizar os dados. Após feito as atualizações, o usuário irá submeter para uma rota <code>put</code> onde chamará a seguinte função.
+        </p>
+
+        <pre>
+public function update(Request $request) &#123;
+
+  $data = $request->all();
+  if ($request->hasFile('imagem') && $request->file('imagem')->isValid()) &#123;
+      $requestImage = $request->imagem;
+      $extension = $requestImage->extension();
+      $imageName = md5($requestImage->getClientOriginalName() . strtotime('now')) . "." . $extension;
+      $requestImage->move(public_path('imgs/eventos'), $imageName);
+      $data['imagem'] = $imageName;
+  &#125;
+
+  Evento::findOrFail($request->id)->update($data);
+  return redirect('/dashboard')->with('msg', 'Evento editado com sucesso!');
+&#125;
+</pre>
+
+        <p>
+          Nesta função está sendo capturado os dados vindos do formulário pelo objeto <code>$request</code> do tipo <code>Request</code>. Aqui também precisamos formatar / ajustar a imagem que por um acaso possa ser enviado do formulário para atualizar o evento, assim salvando a imagem, salvando o caminho, extensão, e nome único. Por fim, os dados serão salvos com o comando <code>Evento::findOrFail($request->id)->update($data);</code>, que irá buscar o evento em questão, no banco de dados e o salvará atualizado em seguida. Logo após será feito o reridicionamento com uma menssagem de "Evento editado com sucesso".
+        </p>
+
       </section>
     </article>
   </section>

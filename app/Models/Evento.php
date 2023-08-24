@@ -17,6 +17,8 @@ class Evento extends Model
         'data'
     ];
 
+    protected $guarded = [];
+
     public function user() {
         return $this->belongsTo(User::class);
     }

@@ -33,9 +33,7 @@
 						</td>
             <td>X</td>
             <td>
-							<form class="d-inline" action="/evento/editar" method="POST">
-								<button class="btn btn-info" type="submit"><i class="fa fa-edit" aria-hidden="true"></i> Editar</button>
-							</form>
+              <a href="/evento/editar/{{ $evento->id }}" class="btn btn-info"><i class="fa fa-edit" aria-hidden="true"></i> Editar</a>
 							<form class="d-inline" action="/evento/excluir/{{ $evento->id }}" method="POST">
                 @csrf
                 @method('DELETE')

@@ -2,7 +2,7 @@
 
 @section('title', 'Criar Evento')
 @section('styles')
-  @vite(['resources/scss/evento-create.scss'])
+  @vite(['resources/scss/eventos/evento-create.scss'])
 @endsection
 
 @section('content-main')

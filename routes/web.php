@@ -19,9 +19,11 @@ use Illuminate\Support\Facades\Route;
 
 Route::get('/', [EventoController::class, 'index']);
 Route::get('/eventos/criar/', [EventoController::class, 'create'])->middleware('auth');
-Route::delete('/evento/excluir/{id}', [EventoController::class, 'destroy']);
+Route::delete('/evento/excluir/{id}', [EventoController::class, 'destroy'])->middleware('auth');
 Route::post('/eventos', [EventoController::class, 'store']);
 Route::get('/evento/{id}', [EventoController::class, 'show']);
 Route::get('/dashboard', [EventoController::class, 'dashboard'])->middleware('auth');
+Route::get('/evento/editar/{id}', [EventoController::class, 'edit'])->middleware('auth');
+Route::put('/evento/salvar/{id}', [EventoController::class, 'update'])->middleware('auth');
 
 Route::get('/estudos-laravel', [EstudosLaravel::class, 'index']);
