@@ -1312,6 +1312,68 @@ public function update(Request $request) &#123;
           Nesta função está sendo capturado os dados vindos do formulário pelo objeto <code>$request</code> do tipo <code>Request</code>. Aqui também precisamos formatar / ajustar a imagem que por um acaso possa ser enviado do formulário para atualizar o evento, assim salvando a imagem, salvando o caminho, extensão, e nome único. Por fim, os dados serão salvos com o comando <code>Evento::findOrFail($request->id)->update($data);</code>, que irá buscar o evento em questão, no banco de dados e o salvará atualizado em seguida. Logo após será feito o reridicionamento com uma menssagem de "Evento editado com sucesso".
         </p>
 
+        <h2>Relação many to many</h2>
+
+        <p>
+          Esta relação estará associado ao usuário que poderá participar de vários eventos, e o evento poderá ter vários usuários. Da mesma forma que lidamos com a relação <code>One to Many</code>, onde adicionamos em cada <code>Model</code> um método para referirmos a essa relação. Na relação <code>Many to Many</code> não sendo diferente, usaremos métodos para <code>User</code> e <code>Evento</code> para referensia-los entre si.
+        </p>
+
+        <h4>Migration - create_evento_user_table</h4>
+
+        <p>
+          Primeiramente iremos precisar da <code>migration</code> para criarmos a tabela no banco de dados. A forma como criamos é uma convenção do Laralvel para criar a tabela intermediária e deve ter o nome ordenado em ordem alfabética (evento_user) e no singular.
+        </p>
+
+        <h4>~/web.php</h4>
+
+        <p>
+          Iremos definir uma rota para confirmar a presença no usuário no evento em questão.
+        </p>
+
+        <pre>
+Route::post('/evento/entrar/{id}', [EventoController::class, 'entrarEvento'])->middleware('auth');
+</pre>
+
+        <h4>~/Models/User.php</h4>
+
+        <pre>
+public function eventosComParticipantes() &#123;
+  return $this->belongsToMany(Evento::class);
+&#125;
+</pre>
+
+        <h4>~/Models/Evento.php</h4>
+
+        <p>
+          Em cada <code>Model</code>, esta sendo feito a relação <code>Many to Many</code> com o método <code>belongsToMany</code> (pertence a muitos). Os métodos retornam ou uma coleção dos eventos ou usuários associados, ou o <code>Eloquent</code> da relação <code>Many to Many</code> podendo encadear métodos específicos desta relação.
+        </p>
+
+        <pre>
+public function users() &#123;
+  return $this->belongsToMany(User::class);
+&#125;
+</pre>
+
+        <h4>~/EventoController.php</h4>
+
+        <p>
+          No <code>controller</code> nós pegamos o usuário e logo após usamos <code>$usuario->eventosComParticipantes()</code> para pegar o método que definimos no modelo e retornar a relação <code>belongsToMany</code> que é atribuida no <code>Eloquent</code>, então encadeamos o método <code>toggle()</code> com <code>$id</code>, este método adiciona a relação usuário com o evento na tabela intermediária no banco de dados, este método agora pertence exclusivamente a um modelo <code>Eloquent</code> com relação <code>Many to many</code>. Essa relação também possue outros métodos, como <code>attach()</code>.
+        </p>
+        
+        <pre>
+public function entrarEvento($id) &#123;
+  $usuario = auth()->user();
+  $evento = Evento::findOrFail($id);
+
+  $usuario->eventosComParticipantes()->toggle($id);
+  return redirect('/dashboard')->with('msg', 'Presença confirmada em ' . $evento->titulo);
+&#125;
+</pre>
+
+        <p>
+          Feito isso, agora apenas redirecionamos o usuário com uma mensagem de confirmação.
+        </p>
+
       </section>
     </article>
   </section>

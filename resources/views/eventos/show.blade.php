@@ -33,12 +33,21 @@
       <div class="col-md-6">
         <h1>{{ $evento->titulo }}</h1>
         <p><i class="fa-solid fa-location-dot"></i> {{ $evento->cidade }}</p>
-        <p><i class="fa fa-users" aria-hidden="true"></i> X participantes</p>
+        <p>
+          <i class="fa fa-users" aria-hidden="true"></i>
+          {{ count($evento->users) == 1 ? '1 participante' : count($evento->users) . ' participantes' }} 
+            <span class="text-success">
+              {{ $asParticipant != null ? '- ' . $asParticipant : '' }}
+            </span>
+        </p>
         <p><i class="fa fa-user" aria-hidden="true"></i> {{ $user->name }}</p>
         <p><i class="fa fa-calendar" aria-hidden="true"></i> {{ date('d/m/Y H:i', strtotime($evento->data)) }}</p>
         <p>Sobre o Evento: <br>{{ $evento->descricao }}<p>
 
-        <a class="btn btn-primary" href="#" role="button">Confirmar presença</a>
+        <form action="/evento/entrar/{{ $evento->id }}" method="post">
+          @csrf
+          <button type="submit1" class="btn btn-primary" role="button">{{ $btn }}</button>
+        </form>
 
         @if (!empty($evento->items))
           <h3>O evento conta com:</h3>

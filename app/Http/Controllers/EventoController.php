@@ -63,7 +63,21 @@ class EventoController extends Controller
     public function show($id) {
         $evento = Evento::findOrFail($id);
         $usuario = User::where('id', $evento->user_id)->first();
-        return view('eventos.show', ['evento' => $evento, 'user' => $usuario]);
+        $asParticipant = null;
+        if (auth()->user()) {
+            $usuarioParticipante = auth()->user();
+
+            if ($usuarioParticipante->eventosComParticipantes()->wherePivot('evento_id', $id)->exists()) {
+                $btn = 'Cancelar presença';
+                $asParticipant = 'Sua presença está confirmada!';
+            } else {
+                $btn = 'Confirmar presença';
+            }
+
+        } else {
+            $btn = 'Confirmar presença';
+        }
+        return view('eventos.show', ['evento' => $evento, 'user' => $usuario, 'btn' => $btn, 'asParticipant' => $asParticipant]);
     }
 
     public function dashboard() {
@@ -96,4 +110,19 @@ class EventoController extends Controller
         Evento::findOrFail($request->id)->update($data);
         return redirect('/dashboard')->with('msg', 'Evento editado com sucesso!');
     }
+
+    public function entrarEvento($id) {
+        $usuario = auth()->user();
+        $evento = Evento::findOrFail($id);
+
+        if ($usuario->eventosComParticipantes()->wherePivot('evento_id', $id)->exists()) {
+            $msg = 'Presença cancelada em ' . $evento->titulo;
+        } else {
+            $msg = 'Presença confirmada em ' . $evento->titulo;
+        }
+        $usuario->eventosComParticipantes()->toggle($id);
+
+        return redirect('/dashboard')->with('msg', $msg);
+    }
+
 };
