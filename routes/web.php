@@ -26,6 +26,8 @@ Route::get('/dashboard', [EventoController::class, 'dashboard'])->middleware('au
 Route::get('/evento/editar/{id}', [EventoController::class, 'edit'])->middleware('auth');
 Route::put('/evento/salvar/{id}', [EventoController::class, 'update'])->middleware('auth');
 
-Route::post('/evento/entrar/{id}', [EventoController::class, 'entrarEvento'])->middleware('auth');
+Route::post('/evento/entrar/{id}', [EventoController::class, 'alterarPresenca'])->middleware('auth');
 
-Route::get('/estudos-laravel', [EstudosLaravel::class, 'index']);
+Route::get('/estudos-laravel', function () {
+  return view('estudos-laravel.estudos-laravel');
+});

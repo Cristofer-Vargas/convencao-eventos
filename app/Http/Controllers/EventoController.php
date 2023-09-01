@@ -83,7 +83,8 @@ class EventoController extends Controller
     public function dashboard() {
         $usuario = auth()->user();
         $eventos = $usuario->eventos;
-        return view('eventos.dashboard', ['eventos' => $eventos]);
+        $eventoParticipacao = $usuario->eventosComParticipantes;
+        return view('eventos.dashboard', ['eventos' => $eventos, 'eventoParticipacao' => $eventoParticipacao]);
     }
 
     public function destroy($id) {
@@ -111,7 +112,7 @@ class EventoController extends Controller
         return redirect('/dashboard')->with('msg', 'Evento editado com sucesso!');
     }
 
-    public function entrarEvento($id) {
+    public function alterarPresenca($id) {
         $usuario = auth()->user();
         $evento = Evento::findOrFail($id);
 

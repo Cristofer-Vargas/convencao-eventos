@@ -9,7 +9,7 @@
 
   <section class="main-fullsize">
     <section class="banner-eventos">
-      <h1>Eventos</h1>
+      <h1>Convenção de Eventos</h1>
     </section>
   </section>
 
@@ -43,7 +43,7 @@
             <div class="card-body">
               <time class="card-date">{{ date('d/m/Y H:i', strtotime($evento->data)) }}</time>
               <h5 class="card-title">{{ $evento->titulo }}</h5>
-              <p class="card-participants">X Participantes</p>
+              <p class="card-participants">{{ count($evento->users) == 1 ? '1 Participante' : count($evento->users) . ' Participantes' }}</p>
               <p class="card-text">{{ $evento->descricao }}</p>
               <a href="/evento/{{ $evento->id }}" class="btn btn-primary">Saber mais</a>
             </div>

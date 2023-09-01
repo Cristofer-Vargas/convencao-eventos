@@ -63,6 +63,27 @@
           font-weight: lighter;
           color: $primary;
         }
+
+        p.card-text {
+          position: relative;
+          width: fit-content;
+          max-height: calc(1.2em * 4);
+          overflow: hidden;
+          white-space: pre-wrap;
+          text-overflow: ellipsis;
+          line-height: 1.2em;
+
+          &::after {
+            content: "...";
+            position: absolute;
+            bottom: 0;
+            right: 0;
+            color: #777;
+            font-weight: lighter;
+            font-size: 0.8em;
+            line-height: 1.2em;
+          }
+        }
       }
     }
   }

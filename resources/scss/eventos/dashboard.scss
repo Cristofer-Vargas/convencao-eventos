@@ -1,0 +1,12 @@
+section.main-content {
+  h1 {
+    font-family: 'Poppins', sans-serif, Arial, Helvetica, sans-serif;
+    font-weight: 600;
+    margin-bottom: 20px;
+  }
+  
+  > section:nth-child(1) {
+    margin-bottom: 60px;
+  }
+
+}

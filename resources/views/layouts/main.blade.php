@@ -33,24 +33,42 @@
         <div class="collapse navbar-collapse" id="navbarSupportedContent">
           <ul class="navbar-nav me-auto mb-2 mb-lg-0">
             <li class="nav-item">
-              <a class="nav-link active" aria-current="page" href="/">
+              <a class="nav-link" aria-current="page" href="/">
                 Eventos
               </a>
             </li>
-
+            
             @auth
-              <li class="nav-item">
-                <a class="nav-link" href="/eventos/criar">
-                  Criar Eventos
-                </a>
-              </li>
-            @endauth
-
             <li class="nav-item">
-              <a class="nav-link" href="/estudos-laravel">
-                Documentação de Estudos
+              <a class="nav-link" href="/dashboard">
+                Dashboard
               </a>
             </li>
+            <li class="nav-item">
+              <a class="nav-link" href="/eventos/criar">
+                Criar Eventos
+              </a>
+            </li>
+            @endauth
+
+            @auth
+            <li class="nav-item">
+              <form action="/logout" method="POST">
+                @csrf
+                <button type="submit" class="nav-link">Sair</button>
+              </form>
+            </li>
+
+              @if(auth()->user()->id == 1 && auth()->user()->name == 'Cristofer')
+              <li class="nav-item">
+                <a class="nav-link" href="/estudos-laravel">
+                  Documentação de Estudos
+                </a>
+              </li>
+              @endif
+              
+            @endauth
+
 
             @guest
               <li class="nav-item">
@@ -64,32 +82,6 @@
                 </a>
               </li>
             @endguest
-
-            @auth
-              <li class="nav-item dropdown">
-                <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown"
-                  aria-expanded="false">
-                  Conta
-                </a>
-                <ul class="dropdown-menu">
-                  <li><a class="dropdown-item" href="#">
-                      Editar Conta
-                    </a></li>
-                  <li><a class="dropdown-item" href="/dashboard">
-                      Meus eventos
-                    </a></li>
-                  <li>
-                    <hr class="dropdown-divider">
-                  </li>
-                  <li class="text-center">
-                    <form action="/logout" method="POST">
-                      @csrf
-                      <button type="submit" class="btn w-full">Sair</button>
-                    </form>
-                  </li>
-                </ul>
-              </li>
-            @endauth
 
           </ul>
           <form class="d-flex" role="search" action="/" method="GET">

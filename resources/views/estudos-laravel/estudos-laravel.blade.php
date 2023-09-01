@@ -1331,7 +1331,7 @@ public function update(Request $request) &#123;
         </p>
 
         <pre>
-Route::post('/evento/entrar/{id}', [EventoController::class, 'entrarEvento'])->middleware('auth');
+Route::post('/evento/entrar/{id}', [EventoController::class, 'alterarPresenca'])->middleware('auth');
 </pre>
 
         <h4>~/Models/User.php</h4>
@@ -1361,7 +1361,7 @@ public function users() &#123;
         </p>
         
         <pre>
-public function entrarEvento($id) &#123;
+public function alterarPresenca($id) &#123;
   $usuario = auth()->user();
   $evento = Evento::findOrFail($id);
 
