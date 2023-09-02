@@ -37,7 +37,7 @@
                 Eventos
               </a>
             </li>
-            
+
             @auth
             <li class="nav-item">
               <a class="nav-link" href="/dashboard">
@@ -66,7 +66,7 @@
                 </a>
               </li>
               @endif
-              
+
             @endauth
 
 
@@ -96,9 +96,7 @@
   <main>
     @if (session('msg'))
       <section class="main-content">
-        <div class="alert alert-success" role="alert">
-          {{ session('msg') }}
-        </div>
+        <x-alert.alert :text="session('msg')" alert-type='success'/>
       </section>
     @endif
 
